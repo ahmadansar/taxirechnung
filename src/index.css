@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-soft: var(--soft);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-danger: var(--danger);
+  --color-ok: var(--ok);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root {
+  --bg: #f4f4f1;
+  --card: #ffffff;
+  --ink: #141414;
+  --muted: #6b6b66;
+  --line: #e2e2dc;
+  --soft: #ececE6;
+  --accent: #ffc400;
+  --accent-ink: #141414;
+  --danger: #c62828;
+  --ok: #1b7f3b;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f0f0e;
+    --card: #1a1a18;
+    --ink: #f2f2ee;
+    --muted: #a3a39c;
+    --line: #2e2e2a;
+    --soft: #252522;
+    --accent: #ffc400;
+    --accent-ink: #141414;
+    --danger: #ef5350;
+    --ok: #4caf6e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f0f0e;
+  --card: #1a1a18;
+  --ink: #f2f2ee;
+  --muted: #a3a39c;
+  --line: #2e2e2a;
+  --soft: #252522;
+  --danger: #ef5350;
+  --ok: #4caf6e;
+  color-scheme: dark;
+}
+
+html, body, #root { min-height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+input, select, textarea, button { font: inherit; }
+/* iOS zooms into inputs below 16px */
+input, select, textarea { font-size: 16px; }
+.pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
+.pt-safe { padding-top: env(safe-area-inset-top); }

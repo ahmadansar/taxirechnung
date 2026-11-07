@@ -1,0 +1,42 @@
+{
+  "name": "taxirechnung",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run sync-shared && tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "build:demo": "vite build --mode demo",
+    "sync-shared": "mkdir -p supabase/functions/_shared && cp src/lib/bank.ts supabase/functions/_shared/bank.ts",
+    "test": "vitest run",
+    "test:db": "bash tests/db/run.sh"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "@tanstack/react-query": "^5.105.1",
+    "jspdf": "^4.2.1",
+    "jszip": "^3.10.1",
+    "qrcode": "^1.5.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.19.2",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@xmldom/xmldom": "^0.8.10",
+    "oxlint": "^1.89.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.5",
+    "vite-plugin-pwa": "^2.0.0",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^3.2.4"
+  }
+}

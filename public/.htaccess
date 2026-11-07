@@ -1,0 +1,19 @@
+# TaxiRechnung – Apache / GoDaddy cPanel
+# Always use HTTPS (needed for "add to home screen" and the share button)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Phones always get the newest app version after an update
+<IfModule mod_headers.c>
+  <FilesMatch "^(index\.html|sw\.js|registerSW\.js|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+AddType application/manifest+json .webmanifest
+DirectoryIndex index.html
+

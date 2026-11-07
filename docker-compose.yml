@@ -1,0 +1,53 @@
+# Local development with Docker – nothing to install except Docker.
+#
+#   docker compose up            → app on http://localhost:5173 (demo mode, data in the browser)
+#                                  + PostgreSQL with the full schema on localhost:5432
+#   docker compose run --rm db-test   → database tests (schema, migrations, tenant isolation, roles)
+#
+# The production backend is Supabase (Postgres + Auth + Storage + Edge Functions).
+# For a complete local Supabase stack use the Supabase CLI instead: `npx supabase start`
+# (it also runs on Docker and applies supabase/migrations automatically).
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports: ['5432:5432']
+    volumes:
+      # first start: Supabase stand-in (auth, storage, roles), then the schema
+      - ./tests/db/00_supabase_stub.sql:/docker-entrypoint-initdb.d/01_stub.sql:ro
+      - ./supabase/schema.sql:/docker-entrypoint-initdb.d/02_schema.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres']
+      interval: 2s
+      retries: 30
+
+  app:
+    image: node:22
+    working_dir: /app
+    command: sh -c "npm ci && npm run sync-shared && npx vite --host 0.0.0.0"
+    ports: ['5173:5173']
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db-test:
+    image: postgres:16
+    profiles: [test]
+    working_dir: /app
+    entrypoint: ['bash', 'tests/db/run.sh']
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+    volumes:
+      - .:/app:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  node_modules:
